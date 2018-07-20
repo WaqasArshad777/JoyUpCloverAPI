@@ -1,0 +1,50 @@
+<%- include('partials/header'); %>
+  <main id="main">
+    <div class="container">
+      <ol class="breadcrumb">
+        <li><a href="#">Get Inventory</a></li>
+      </ol>
+      <h1>Get Inventory</h1>
+      <br />
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <div id="alert"></div>
+            <button class="btn btn-lg btn-primary submit-btn" id="get-items-button" type="button">Get Items</button>
+        </div>
+      </div>
+      <hr />
+    
+    </div>
+    <br />
+    <br />
+  </main>
+  <%- include('partials/footer'); %>
+
+  <script>
+
+    
+    $('#get-items-button').on('click',function(e){
+      $('#get-items-button').addClass('disabled');
+      $('#get-items-button').text('Getting Items...');
+      $.ajax({
+        url: '/getInventory',
+        method: 'get',
+        contentType: 'application/json',
+      }).success(function(data){
+        var html = '<div class="alert alert-success alert-dismissible">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        'Items have been stored in the local storage!' + '</div>';
+        $('#alert').html(html);
+        $('#get-items-button').removeClass('disabled');
+        $('#get-items-button').text('Get Items');
+      }).error(function(response){
+        var html = '<div class="alert alert-danger alert-dismissible">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        response.responseJSON.message + '</div>';
+        $('#alert').html(html);
+        $('#get-items-button').removeClass('disabled');
+        $('#get-items-button').text('Get Items');
+      });
+      return false;
+    })
+  </script>
